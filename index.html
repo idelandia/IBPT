@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta IBPT</title>
+    
+    <!-- Linha que conecta o HTML ao arquivo CSS separado -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Consulta de Alíquotas IBPT</h2>
+    <label for="codigo">Código do Serviço (Ex: 0101, 1719, 4001):</label>
+    <input type="text" id="codigo" inputmode="numeric" placeholder="Digite o código aqui">
+    <button onclick="buscarCodigo()">Verificar Percentuais</button>
+
+    <div id="resultado" class="resultado">
+        <p class="bloco-desc"><strong>Descrição:</strong> <span id="res-desc" style="color:#cbd5e1; margin-top: 5px; font-weight: normal;"></span></p>
+        <p><strong>Tabela Origem:</strong> <span id="res-tab" class="val"></span></p>
+        <p><strong>Nacional Federal:</strong> <span id="res-fed-nac" class="val"></span></p>
+        <p><strong>Importados Federal:</strong> <span id="res-fed-imp" class="val"></span></p>
+        <p><strong>Estadual:</strong> <span id="res-est" class="val"></span></p>
+        <p><strong>Municipal (ISS):</strong> <span id="res-mun" class="val"></span></p>
+    </div>
+</div>
+
+<script>
+    // 1. Função de Busca
+    function buscarCodigo() {
+        // Remove espaços invisíveis que o corretor do celular pode adicionar
+        const codigoInput = document.getElementById("codigo").value.trim().replace(/\s+/g, '');
+        const painelResultado = document.getElementById("resultado");
+        
+        if (dadosIBPT[codigoInput]) {
+            const info = dadosIBPT[codigoInput];
+            document.getElementById("res-desc").innerText = info.desc;
+            document.getElementById("res-tab").innerText = info.tabela;
+            
+            document.getElementById("res-fed-nac").innerText = info.federalNac.toFixed(2).replace('.', ',') + " %";
+            document.getElementById("res-fed-imp").innerText = info.federalImp.toFixed(2).replace('.', ',') + " %";
+            document.getElementById("res-est").innerText = info.estadual.toFixed(2).replace('.', ',') + " %";
+            document.getElementById("res-mun").innerText = info.municipal.toFixed(2).replace('.', ',') + " %";
+            
+            painelResultado.style.display = "block";
+        } else {
+            alert("Código de serviço não localizado na base.");
+            painelResultado.style.display = "none";
+        }
+    }
+
+    // 2. Base de Dados Completa
+    const dadosIBPT = {
+        "0101": { tabela: "2", desc: "Analise e desenvolvimento de sistemas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.9 },
+        "0102": { tabela: "2", desc: "Programacao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.9 },
+        "0103": { tabela: "2", desc: "Processamento de dados e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.9 },
+        "0104": { tabela: "2", desc: "Elaboracao de programas de computadores, inclusive de jogos eletronicos.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.1 },
+        "0105": { tabela: "2", desc: "Licenciamento ou cessao de direito de uso de programas de computacao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.11 },
+        "0106": { tabela: "2", desc: "Assessoria e consultoria em informatica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.91 },
+        "0107": { tabela: "2", desc: "Suporte tecnico em informatica, inclusive instalacao, configuracao e manutencao de programas de computacao e bancos de dados.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.7 },
+        "0108": { tabela: "2", desc: "Planejamento, confeccao, manutencao e atualizacao de paginas eletronicas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.91 },
+        "0201": { tabela: "2", desc: "Servicos de pesquisas e desenvolvimento de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.16 },
+        "0301": { tabela: "2", desc: "Vetado", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.66 },
+        "0302": { tabela: "2", desc: "Cessao de direito de uso de marcas e de sinais de propaganda.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.09 },
+        "0303": { tabela: "2", desc: "Exploracao de saloes de festas, centro de convencoes, escritorios virtuais, stands, quadras esportivas, estadios, ginasios, auditorios, casas de espetaculos, parques de diversoes, canchas e congeneres, para realizacao de eventos ou negocios de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.42 },
+        "0304": { tabela: "2", desc: "Locacao, sublocacao, arrendamento, direito de passagem ou permissao de uso, compartilhado ou nao, de ferrovia, rodovia, postes, cabos, dutos e condutos de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.44 },
+        "0305": { tabela: "2", desc: "Cessao de andaimes, palcos, coberturas e outras estruturas de uso temporario.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.28 },
+        "0401": { tabela: "2", desc: "Medicina e biomedicina.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.25 },
+        "0402": { tabela: "2", desc: "Analises clinicas, patologia, eletricidade medica, radioterapia, quimioterapia, ultra-sonografia, ressonancia magnetica, radiologia, tomografia e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.3 },
+        "0403": { tabela: "2", desc: "Hospitais, clinicas, laboratorios, sanatorios, manicomios, casas de saude, prontos-socorros, ambulatorios e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.69 },
+        "0404": { tabela: "2", desc: "Instrumentacao cirurgica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.12 },
+        "0405": { tabela: "2", desc: "Acupuntura.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.12 },
+        "0406": { tabela: "2", desc: "Enfermagem, inclusive servicos auxiliares.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.09 },
+        "0407": { tabela: "2", desc: "Servicos farmaceuticos.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.73 },
+        "0408": { tabela: "2", desc: "Terapia ocupacional, fisioterapia e fonoaudiologia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.14 },
+        "0409": { tabela: "2", desc: "Terapias de qualquer especie destinadas ao tratamento fisico, organico e mental.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.14 },
+        "0410": { tabela: "2", desc: "Nutricao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.11 },
+        "0411": { tabela: "2", desc: "Obstetricia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.11 },
+        "0412": { tabela: "2", desc: "Odontologia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.13 },
+        "0413": { tabela: "2", desc: "Ortoptica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.71 },
+        "0414": { tabela: "2", desc: "Proteses sob encomenda.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.04 },
+        "0415": { tabela: "2", desc: "Psicanalise.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.14 },
+        "0416": { tabela: "2", desc: "Psicologia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.74 },
+        "0417": { tabela: "2", desc: "Casas de repouso e de recuperacao, creches, asilos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.07 },
+        "0418": { tabela: "2", desc: "Inseminacao artificial, fertilizacao in vitro e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.15 },
+        "0419": { tabela: "2", desc: "Bancos de sangue, leite, pele, olhos, ovulos, semen e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.08 },
+        "0420": { tabela: "2", desc: "Coleta de sangue, leite, tecidos, semen, orgaos e materiais biologicos de qualquer especie.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.8 },
+        "0421": { tabela: "2", desc: "Unidade de atendimento, assistencia ou tratamento movel e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.15 },
+        "0422": { tabela: "2", desc: "Planos de medicina de grupo ou individual e convenios para prestacao de assistencia medica, hospitalar, odontologica e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.14 },
+        "0423": { tabela: "2", desc: "Outros planos de saude que se cumpram atraves de servicos de terceiros contratados, credenciados, cooperados ou apenas pagos pelo operador do plano mediante indicacao do beneficiario.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.15 },
+        "0501": { tabela: "2", desc: "Medicina veterinaria e zootecnia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.19 },
+        "0502": { tabela: "2", desc: "Hospitais, clinicas, ambulatorios, prontos-socorros e congeneres, na area veterinaria.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.18 },
+        "0503": { tabela: "2", desc: "Laboratorios de analise na area veterinaria.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.19 },
+        "0504": { tabela: "2", desc: "Inseminacao artificial, fertilizacao in vitro e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.19 },
+        "0505": { tabela: "2", desc: "Bancos de sangue e de orgaos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.13 },
+        "0506": { tabela: "2", desc: "Coleta de sangue, leite, tecidos, semen, orgaos e materiais biologicos de qualquer especie.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.82 },
+        "0507": { tabela: "2", desc: "Unidade de atendimento, assistencia ou tratamento movel e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.27 },
+        "0508": { tabela: "2", desc: "Guarda, tratamento, amestramento, embelezamento, alojamento e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.24 },
+        "0509": { tabela: "2", desc: "Planos de atendimento e assistencia medico-veterinaria.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.24 },
+        "0601": { tabela: "2", desc: "Barbearia, cabeleireiros, manicuros, pedicuros e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.84 },
+        "0602": { tabela: "2", desc: "Esteticistas, treatment de pele, depilacao e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.91 },
+        "0603": { tabela: "2", desc: "Banhos, duchas, sauna, massagens e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.9 },
+        "0604": { tabela: "2", desc: "Ginastica, danca, esportes, natacao, artes marciais e demais atividades fisicas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.01 },
+        "0605": { tabela: "2", desc: "Centros de emagrecimento, spa e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.25 },
+        "0701": { tabela: "2", desc: "Engenharia, agronomia, agrimensura, arquitetura, geologia, urbanismo, paisagismo e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.19 },
+        "0702": { tabela: "2", desc: "Execucao, por administracao, empreitada ou subempreitada, de obras de construcao civil, hidraulica ou eletrica e de outras obras semelhantes, inclusive sondagem, perfuracao de pocos, escavacao, drenagem e irrigacao, terraplanagem, pavimentacao, concretagem e a instalacao e montagem de produtos pecas e equipamentos", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.33 },
+        "0703": { tabela: "2", desc: "Elaboracao de planos diretores, estudos de viabilidade, estudos organizacionais e outros, relacionados com obras e servicos de engenharia, elaboracao de anteprojetos, projetos basicos e projetos executivos para trabalhos de engenharia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.26 },
+        "0704": { tabela: "2", desc: "Demolicao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.19 },
+        "0705": { tabela: "2", desc: "Reparacao, conservacao e reforma de edificios, estradas, pontes, portos e congeneres exceto o fornecimento de mercadorias produzidas pelo prestador dos servicos, fora do local da prestacao dos servicos, que fica sujeito ao icms .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.29 },
+        "0706": { tabela: "2", desc: "Colocacao e instalacao de tapetes, carpetes, assoalhos, cortinas, revestimentos de parede, vidros, divisorias, placas de gesso e congeneres, com material fornecido pelo tomador do servico.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.34 },
+        "0707": { tabela: "2", desc: "Recuperacao, raspagem, polimento e lustracao de pisos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.23 },
+        "0708": { tabela: "2", desc: "Calafetacao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.21 },
+        "0709": { tabela: "2", desc: "Varricao, coleta, remocao, incineracao, tratamento, reciclagem, separacao e destinacao final de lixo, rejeitos e outros residuos quaisquer.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.53 },
+        "0710": { tabela: "2", desc: "Limpeza, manutencao e conservacao de vias e logradouros publicos, imoveis, chamines, piscinas, parques, jardins e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 5.00 },
+        "0711": { tabela: "2", desc: "Decoracao e jardinagem, inclusive corte e poda de arvores.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.39 },
+        "0712": { tabela: "2", desc: "Controle e tratamento de efluentes de qualquer natureza e de agentes fisicos, quimicos e biologicos.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.52 },
+        "0713": { tabela: "2", desc: "Dedetizacao, desinfeccao, desinsetizacao, imunizacao, higienizacao, desratizacao, pulverizacao e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.15 },
+        "0714": { tabela: "2", desc: "Vetado", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.09 },
+        "0715": { tabela: "2", desc: "Vetado", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.12 },
+        "0716": { tabela: "2", desc: "Florestamento, reflorestamento, semeadura, adubacao e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.37 },
+        "0717": { tabela: "2", desc: "Escoramento, contencao de encostas e servicos congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.36 },
+        "0718": { tabela: "2", desc: "Limpeza e dragagem de rios, portos, canais, baias, lagos, lagoas, represas, acudes e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.41 },
+        "0719": { tabela: "2", desc: "Acompanhamento e fiscalizacao da execucao de obras de engenharia, arquitetura e urbanismo.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.38 },
+        "0720": { tabela: "2", desc: "Aerofotogrametria inclusive interpretacao , cartografia, mapeamento, levantamentos topograficos, batimetricos, geograficos, geodesicos, geologicos, geofisicos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.11 },
+        "0721": { tabela: "2", desc: "Pesquisa, perfuracao, cimentacao, mergulho, perfilagem, concretacao, testemunhagem, pescaria, estimulacao e outros servicos relacionados com a exploracao e explotacao de petroleo, gas natural e de outros recursos minerais.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.29 },
+        "0722": { tabela: "2", desc: "Nucleacao e bombardeamento de nuvens e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.26 },
+        "0801": { tabela: "2", desc: "Ensino regular pre-escolar, fundamental, medio e superior.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.06 },
+        "0802": { tabela: "2", desc: "Instrucao, treinamento, orientacao pedagogica e educacional, avaliacao de conhecimentos de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.08 },
+        "0901": { tabela: "2", desc: "Hospedagem de qualquer natureza em hoteis, apart-service condominiais, flat, apart-hoteis, hoteis residencia, residence-service, suite service, hotelaria maritima, moteis, pensoes e congeneres, ocupacao por temporada com fornecimento de servico o valor da alimentacao e gorjeta, quando incluido no preco da diaria, fica sujeito ao iss", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.09 },
+        "0902": { tabela: "2", desc: "Agenciamento, organizacao, promocao, intermediacao e execucao de programas de turismo, passeios, viagens, excursoes, hospedagens e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.08 },
+        "0903": { tabela: "2", desc: "Guias de turismo.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.07 },
+        "1001": { tabela: "2", desc: "Agenciamento, corretagem ou intermediacao de cambio, de seguros, de cartoes de credito, de planos de saude e de planos de previdencia privada.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.98 },
+        "1002": { tabela: "2", desc: "Agenciamento, corretagem ou intermediacao de titulos em geral, valores mobiliarios e contratos quaisquer.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.04 },
+        "1003": { tabela: "2", desc: "Agenciamento, corretagem ou intermediacao de direitos de propriedade industrial, artistica ou literaria.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.08 },
+        "1004": { tabela: "2", desc: "Agenciamento, corretagem ou intermediacao de contratos de arrendamento mercantil leasing , de franquia franchising e de faturizacao factoring .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.19 },
+        "1005": { tabela: "2", desc: "Agenciamento, corretagem ou intermediacao de bens moveis ou imoveis, nao abrangidos em outros itens ou subitens, inclusive aqueles realizados no ambito de bolsas de mercadorias e futuros, por quaisquer meios.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.03 },
+        "1006": { tabela: "2", desc: "Agenciamento maritimo.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.06 },
+        "1007": { tabela: "2", desc: "Agenciamento de noticias.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.01 },
+        "1008": { tabela: "2", desc: "Agenciamento de publicidade e propaganda, inclusive o agenciamento de veiculacao por quaisquer meios.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.01 },
+        "1009": { tabela: "2", desc: "Representacao de qualquer natureza, inclusive comercial.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.11 },
+        "1010": { tabela: "2", desc: "Distribuicao de bens de terceiros.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.14 },
+        "1101": { tabela: "2", desc: "Guarda e estacionamento de veiculos terrestres automotores, de aeronaves e de embarcacoes.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.17 },
+        "1102": { tabela: "2", desc: "Vigilancia, seguranca ou monitoramento de bens e pessoas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.26 },
+        "1103": { tabela: "2", desc: "Escolta, inclusive de veiculos e cargas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.4 },
+        "1104": { tabela: "2", desc: "Armazenamento, deposito, carga, descarga, arrumacao e guarda de bens de qualquer especie.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.21 },
+        "1201": { tabela: "2", desc: "Espetaculos teatrais.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.14 },
+        "1202": { tabela: "2", desc: "Exibicoes cinematograficas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.11 },
+        "1204": { tabela: "2", desc: "Programas de auditorio.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.35 },
+        "1205": { tabela: "2", desc: "Parques de diversoes, centros de lazer e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.53 },
+        "1206": { tabela: "2", desc: "Boates, taxi-dancing e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.48 },
+        "1207": { tabela: "2", desc: "Shows, ballet, dancas, desfiles, bailes, operas, concertos, recitais, festivais e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.39 },
+        "1208": { tabela: "2", desc: "Feiras, exposicoes, congressos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.37 },
+        "1209": { tabela: "2", desc: "Bilhares, boliches e diversoes eletronicas ou nao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.34 },
+        "1210": { tabela: "2", desc: "Corridas e competicoes de animais.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.2 },
+        "1211": { tabela: "2", desc: "Competicoes esportivas ou de destreza fisica ou intelectual, com ou sem a participacao do espectador.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.24 },
+        "1212": { tabela: "2", desc: "Execucao de musica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.18 },
+        "1213": { tabela: "2", desc: "Producao, mediante ou sem encomenda previa, de eventos, espetaculos, entrevistas, shows, ballet, dancas, desfiles, bailes, teatros, operas, concertos, recitais, festivais e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.19 },
+        "1214": { tabela: "2", desc: "Fornecimento de musica para ambientes fechados ou nao, mediante transmissao por qualquer processo.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.09 },
+        "1215": { tabela: "2", desc: "Desfiles de blocos carnavalescos ou folcloricos, trios eletricos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.05 },
+        "1216": { tabela: "2", desc: "Exibicao de filmes, entrevistas, musicais, espetaculos, shows, concertos, desfiles, operas, competicoes esportivas, de destreza intelectual ou congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.26 },
+        "1217": { tabela: "2", desc: "Recreacao e animacao, inclusive em festas e eventos de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.29 },
+        "1301": { tabela: "2", desc: "Vetado", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.89 },
+        "1302": { tabela: "2", desc: "Fonografia ou gravacao de sons, inclusive trucagem, dublagem, mixagem e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.13 },
+        "1303": { tabela: "2", desc: "Fotografia e cinematografia, inclusive revelacao, ampliacao, copia, reproducao, trucagem e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.22 },
+        "1304": { tabela: "2", desc: "Reprografia, microfilmagem e digitalizacao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.35 },
+        "1305": { tabela: "2", desc: "Composicao grafica, fotocomposicao, clicheria, zincografia, litografia, fotolitografia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.22 },
+        "1401": { tabela: "2", desc: "Lubrificacao, limpeza, lustracao, revisao, carga e recarga, conserto, restauracao, blindagem, manutencao e conservacao de maquinas, veiculos, aparelhos, equipamentos, motores, elevadores ou de qualquer objeto exceto pecas e partes empregadas, que ficam sujeitas ao icms .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.9 },
+        "1402": { tabela: "2", desc: "Assistencia tecnica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.82 },
+        "1403": { tabela: "2", desc: "Recondicionamento de motores exceto pecas e partes empregadas, que ficam sujeitas ao icms .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.3 },
+        "1404": { tabela: "2", desc: "Recauchutagem ou regeneracao de pneus.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.1 },
+        "1405": { tabela: "2", desc: "Restauracao, recondicionamento, acondicionamento, pintura, beneficiamento, lavagem, secagem, tingimento, galvanoplastia, anodizacao, corte, recorte, polimento, plastificacao e congeneres, de objetos quaisquer.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.07 },
+        "1406": { tabela: "2", desc: "Instalacao e montagem de aparelhos, maquinas e equipamentos, inclusive montagem industrial, prestados ao usuario final, exclusivamente com material por ele fornecido.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.17 },
+        "1407": { tabela: "2", desc: "Colocacao de molduras e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.01 },
+        "1408": { tabela: "2", desc: "Encadernacao, gravacao e douracao de livros, revistas e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.15 },
+        "1409": { tabela: "2", desc: "Alfaiataria e costura, quando o material for fornecido pelo usuario final, exceto aviamento.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.87 },
+        "1410": { tabela: "2", desc: "Tinturaria e lavanderia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.01 },
+        "1411": { tabela: "2", desc: "Tapecaria e reforma de estofamentos em geral.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.33 },
+        "1412": { tabela: "2", desc: "Funilaria e lanternagem.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.33 },
+        "1413": { tabela: "2", desc: "Carpintaria e serralheria.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.26 },
+        "1501": { tabela: "2", desc: "Administracao de fundos quaisquer, de consorcio, de cartao de credito ou debito e congeneres, de carteira de clientes, de cheques pre-datados e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.15 },
+        "1502": { tabela: "2", desc: "Abertura de contas em geral, inclusive conta-corrente, conta de investimentos e aplicacao e caderneta de poupanca, no pais e no exterior, bem como a manutencao das referidas contas ativas e inativas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.78 },
+        "1503": { tabela: "2", desc: "Locacao e manutencao de cofres particulares, de terminais eletronicos, de terminais de atendimento e de bens e equipamentos em geral.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.67 },
+        "1504": { tabela: "2", desc: "Fornecimento ou emissao de atestados em geral, inclusive atestado de idoneidade, atestado de capacidade financeira e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1505": { tabela: "2", desc: "Cadastro, elaboracao de ficha cadastral, renovacao cadastral e congeneres, inclusao ou exclusao no cadastro de emitentes de cheques sem fundos ccf ou em quaisquer outros bancos cadastrais.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.68 },
+        "1506": { tabela: "2", desc: "Emissao, reemissao e fornecimento de avisos, comprovantes e documentos em geral, abono de firmas, coleta e entrega de documentos, bens e valores, comunicacao com outra agencia ou com a administracao central, licenciamento eletronico de veiculos, transferencia de veiculos, agenciamento fiduciario ou depositario, devolucao de bens em custodia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1507": { tabela: "2", desc: "Acesso, movimentacao, atendimento e consulta a contas em geral, por qualquer meio ou processo, inclusive por telefone, fac-simile, internet e telex, acesso a terminais de atendimento, inclusive vinte e quatro horas, acesso a outro banco e a rede compartilhada, fornecimento de saldo, extrato e demais informacoes", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1508": { tabela: "2", desc: "Emissao, reemissao, alteracao, cessao, substituicao, cancelamento e registro de contrato de credito, estudo, analise e avaliacao de operacoes de credito, emissao, concessao, alteracao ou contratacao de aval, fianca, anuencia e congeneres, servicos relativos a abertura de credito, para quaisquer fins.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1509": { tabela: "2", desc: "Arrendamento mercantil leasing de quaisquer bens, inclusive cessao de direitos e obrigacoes, substituicao de garantia, alteracao, cancelamento e registro de contrato, e demais servicos relacionados ao arrendamento mercantil leasing .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.9 },
+        "1510": { tabela: "2", desc: "Servicos relacionados a cobrancas, recebimentos ou pagamentos em geral, de titulos quaisquer, de contas ou carnes, de cambio, de tributos e por conta de terceiros, inclusive os efetuados por meio eletronico, automatico ou por maquinas de atendimento, fornecimento de posicao de cobranca, recebimento ou pagamento, emissao de carnes", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.84 },
+        "1511": { tabela: "2", desc: "Devolucao de titulos, protesto de titulos, sustacao de protesto, manutencao de titulos, reapresentacao de titulos, e demais servicos a eles relacionados.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1512": { tabela: "2", desc: "Custodia em geral, inclusive de titulos e valores mobiliarios.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1513": { tabela: "2", desc: "Servicos relacionados a operacoes de cambio em geral, edicao, alteracao, prorrogacao, cancelamento e baixa de contrato de cambio, emissao de registro de exportacao ou de credito, cobranca ou deposito no exterior, emissao, cancelamento e demais servicos relativos a carta de credito de importacao", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.71 },
+        "1514": { tabela: "2", desc: "Fornecimento, emissao, reemissao, renovacao e manutencao de cartao magnetico, cartao de credito, cartao de debito, cartao salario e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.84 },
+        "1515": { tabela: "2", desc: "Compensacao de cheques e titulos quaisquer, servicos relacionados a deposito, inclusive deposito identificado, a saque de contas quaisquer, por qualquer meio ou processo, inclusive em terminais eletronicos e de atendimento.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.82 },
+        "1516": { tabela: "2", desc: "Emissao, reemissao, liquidacao, alteracao, cancelamento e baixa de ordens de pagamento, ordens de credito e similares, por qualquer meio ou processo, servicos relacionados a transferencia de valores, dados, fundos, pagamentos e similares, inclusive entre contas em geral.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.77 },
+        "1517": { tabela: "2", desc: "Emissao, fornecimento, devolucao, sustacao, cancelamento e oposicao de cheques quaisquer, avulso ou por talao.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.77 },
+        "1518": { tabela: "2", desc: "Servicos relacionados a credito imobiliario, avaliacao e vistoria de imovel ou obra, analise tecnica e juridica, emissao, reemissao, alteracao, transferencia e renegociacao de contrato, emissao e reemissao do termo de quitacao e demais servicos relacionados a credito imobiliario.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.67 },
+        "1601": { tabela: "2", desc: "Servicos de transporte de natureza municipal.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.45 },
+        "1701": { tabela: "2", desc: "Assessoria ou consultoria de qualquer natureza, nao contida em outros itens desta lista, analise, exame, pesquisa, coleta, compilacao e fornecimento de dados e informacoes de qualquer natureza, inclusive cadastro e similares.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.09 },
+        "1702": { tabela: "2", desc: "Datilografia, digitacao, estenografia, expediente, secretaria em geral, resposta audivel, redacao, edicao, interpretacao, revisao, traducao, apoio e infra-estrutura administrativa e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.96 },
+        "1703": { tabela: "2", desc: "Planejamento, coordenacao, programacao ou organizacao tecnica, financeira ou administrative.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.03 },
+        "1704": { tabela: "2", desc: "Recrutamento, agenciamento, selecao e colocacao de mao-de-obra.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.91 },
+        "1705": { tabela: "2", desc: "Fornecimento de mao-de-obra, mesmo em carater temporario, inclusive de empregados ou trabalhadores, avulsos ou temporarios, contratados pelo prestador de servico.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.17 },
+        "1706": { tabela: "2", desc: "Propaganda e publicidade, inclusive promocao de vendas, planejamento de campanhas ou sistemas de publicidade, elaboracao de desenhos, textos e demais materiais publicitarios.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.1 },
+        "1707": { tabela: "2", desc: "Vetado.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.68 },
+        "1708": { tabela: "2", desc: "Franquia franchising .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.03 },
+        "1709": { tabela: "2", desc: "Pericias, laudos, exames tecnicos e analises tecnicas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.37 },
+        "1710": { tabela: "2", desc: "Planejamento, organizacao e administracao de feiras, exposicoes, congressos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.3 },
+        "1711": { tabela: "2", desc: "Organizacao de festas e recepcoes, bufe exceto o fornecimento de alimentacao e bebidas, que fica sujeito ao icms .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.01 },
+        "1712": { tabela: "2", desc: "Administracao em geral, inclusive de bens e negocios de terceiros.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.19 },
+        "1713": { tabela: "2", desc: "Leilao e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4 },
+        "1714": { tabela: "2", desc: "Advocacia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.07 },
+        "1715": { tabela: "2", desc: "Arbitragem de qualquer especie, inclusive juridica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.94 },
+        "1716": { tabela: "2", desc: "Auditoria.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.91 },
+        "1717": { tabela: "2", desc: "Analise de organizacao e metodos.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.04 },
+        "1718": { tabela: "2", desc: "Atuaria e calculos tecnicos de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.03 },
+        "1719": { tabela: "2", desc: "Contabilidade, inclusive servicos tecnicos e auxiliares.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.18 },
+        "1720": { tabela: "2", desc: "Consultoria e assessoria economica ou financeira.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.91 },
+        "1721": { tabela: "2", desc: "Estatistica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.14 },
+        "1722": { tabela: "2", desc: "Cobranca em geral.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.42 },
+        "1723": { tabela: "2", desc: "Assessoria, analise, avaliacao, atendimento, consulta, cadastro, selecao, gerenciamento de informacoes, administracao de contas a receber ou a pagar e em geral, relacionados a operacoes de faturizacao factoring .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.14 },
+        "1724": { tabela: "2", desc: "Apresentacao de palestras, conferencias, seminarios e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 2.44 },
+        "1801": { tabela: "2", desc: "Servicos de regulacao de sinistros vinculados a contratos de seguros, inspecao e avaliacao de riscos para cobertura de contratos de seguros, prevencao e gerencia de riscos seguraveis e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.29 },
+        "1901": { tabela: "2", desc: "Servicos de distribuicao e venda de bilhetes e demais produtos de loteria, bingos, cartoes, pules ou cupons de apostas, sorteios, premios, inclusive os decorrentes de titulos de capitalizacao e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.47 },
+        "2001": { tabela: "2", desc: "Servicos portuarios, ferroportuarios, utilizacao de porto, movimentacao de passageiros, reboque de embarcacoes, rebocador escoteiro, atracacao, desatracacao, servicos de praticagem, capatazia, armazenagem de qualquer natureza, servicos acessorios, servicos de armadores, estiva, conferencia, logistica e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.28 },
+        "2002": { tabela: "2", desc: "Servicos aeroportuarios, utilizacao de aeroporto, movimentacao de passageiros, armazenagem de qualquer natureza, capatazia, movimentacao de aeronaves, servicos de apoio aeroportuarios, servicos acessorios, movimentacao de mercadorias, logistica e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.39 },
+        "2003": { tabela: "2", desc: "Servicos de terminais rodoviarios, ferroviarios, metroviarios, movimentacao de passageiros, mercadorias, inclusive suas operacoes, logistica e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.01 },
+        "2101": { tabela: "2", desc: "Servicos de registros publicos, cartorarios e notariais.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.29 },
+        "2201": { tabela: "2", desc: "Servicos de exploracao de rodovia mediante cobranca de preco ou pedagio dos usuarios, envolvendo execucao de servicos de conservacao, manutencao, melhoramentos para adequacao de capacidade e seguranca de transito, operacao, monitoracao, assistencia aos usuarios e outros servicos definidos em contratos, atos de concessao", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.79 },
+        "2301": { tabela: "2", desc: "Servicos de programacao e comunicacao visual, desenho industrial e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.27 },
+        "2401": { tabela: "2", desc: "Servicos de chaveiros, confeccao de carimbos, placas, sinalizacao visual, banners, adesivos e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.23 },
+        "2501": { tabela: "2", desc: "Funerais, inclusive fornecimento de caixao, urna ou esquifes, aluguel de capela, transporte do corpo cadaverico, fornecimento de flores, coroas e outros paramentos, desembaraco de certidao de obito, fornecimento de veu, essa e outros adornos, embalsamento, embelezamento, conservacao ou restauracao de cadaveres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.29 },
+        "2502": { tabela: "2", desc: "Cremacao de corpos e partes de corpos cadavericos.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.47 },
+        "2503": { tabela: "2", desc: "Planos ou convenio funerarios.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.2 },
+        "2504": { tabela: "2", desc: "Manutencao e conservacao de jazigos e cemiterios.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.32 },
+        "2601": { tabela: "2", desc: "Servicos de coleta, remessa ou entrega de correspondencias, documentos, objetos, bens ou valores, inclusive pelos correios e suas agencias franqueadas, courrier e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.31 },
+        "2701": { tabela: "2", desc: "Servicos de assistencia social.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.12 },
+        "2801": { tabela: "2", desc: "Servicos de avaliacao de bens e servicos de qualquer natureza.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.17 },
+        "2901": { tabela: "2", desc: "Servicos de biblioteconomia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.1 },
+        "3001": { tabela: "2", desc: "Servicos de biologia, biotecnologia e quimica.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4 },
+        "3101": { tabela: "2", desc: "Servicos tecnicos em edificacoes, eletronica, eletrotecnica, mecanica, telecomunicacoes e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.07 },
+        "3201": { tabela: "2", desc: "Servicos de desenhos tecnicos.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.12 },
+        "3301": { tabela: "2", desc: "Servicos de desembaraco aduaneiro, comissarios, despachantes e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.04 },
+        "3401": { tabela: "2", desc: "Servicos de investigacoes particulares, detetives e congeneres.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.04 },
+        "3501": { tabela: "2", desc: "Servicos de reportagem, assessoria de imprensa, jornalismo e relacoes publicas.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.15 },
+        "3601": { tabela: "2", desc: "Servicos de meteorologia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.16 },
+        "3701": { tabela: "2", desc: "Servicos de artistas, atletas, modelos e manequins.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 3.99 },
+        "3801": { tabela: "2", desc: "Servicos de museologia.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.17 },
+        "3901": { tabela: "2", desc: "Servicos de ourivesaria e lapidacao quando o material for fornecido pelo tomador do servico .", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.19 },
+        "4001": { tabela: "2", desc: "Obras de arte sob encomenda.", federalNac: 13.45, federalImp: 15.45, estadual: 0, municipal: 4.07 }
+    };
+</script>
+
+</body>
+</html>
